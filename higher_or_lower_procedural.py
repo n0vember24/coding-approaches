@@ -1,7 +1,7 @@
 import random
 
-SUIT_TUPLE = ('Spades', 'Hearts', 'Clubs', 'Diamonds')
-RANK_TUPLE = ('Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King')
+SUIT_TUPLE = ('Пики', 'Черви', 'Трефы', 'Бубны')
+RANK_TUPLE = ('Туз', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Валет', 'Дама', 'Король')
 NCARDS = 8
 
 
@@ -16,10 +16,15 @@ def shuffle_card(list_in):
 	return list_out
 
 
-print('Welcome to higher or lower procedural!')
-print('U have to choose whether the next card to be shown will be higher or lower than the current card ')
-print('Getting it right adds 20 points, get it wrong and u lose 15 points')
-print('U have 50 points to start')
+WELCOME_TEXT = """
+Добро пожаловать в игру "Больше или Меньше" написанный с использованием процедурного подхода Python
+Вам нужно выбрать, будет ли следующая показанная карта выше или ниже текущей карты.
+Если вы угадали, то получаете 20 очков. А если нет, то потеряете 15.
+Игра продолжится до тех пор пока вы не потеряете все очки
+У вас есть 50 очков для начала
+"""
+
+print(WELCOME_TEXT)
 
 starting_list = []
 for suit in SUIT_TUPLE:
@@ -29,49 +34,56 @@ for suit in SUIT_TUPLE:
 score = 50
 
 while True:
-	print()
 	game_list = shuffle_card(starting_list)
 	current_card_dict = get_card(game_list)
 	current_card_rank = current_card_dict['rank']
 	current_card_value = current_card_dict['value']
 	current_card_suit = current_card_dict['suit']
-	print('Starting card is %s1 of %s2\n' % (current_card_rank, current_card_suit))
 
 	for card_number in range(0, NCARDS):
-		answer = input(
-			'Will the next car be higher or lower than %s1 of %s2 (h/l): ' % (current_card_rank, current_card_suit))
-
-		answer = answer.lower()
+		print('Начинающая карта: %s, %s\n' % (current_card_rank, current_card_suit))
 		next_card_dict = get_card(game_list)
 		next_card_rank = next_card_dict['rank']
 		next_card_suit = next_card_dict['suit']
 		next_card_value = next_card_dict['value']
-		print('Next card is %s1 of %s2\n' % (next_card_rank, next_card_suit))
 
-		if answer == 'h':
-			if next_card_value > current_card_value:
-				print('Correct! +20 points')
-				score += 20
+		while True:
+			INPUT_TEXT = 'Следующая карта будет больше или меньше текущей?\nТекущая карта: %s, %s\nВаш ответ (б/м): ' % (
+				current_card_rank, current_card_suit)
+			answer = input(INPUT_TEXT)
+			answer = answer.lower()
+
+			if answer == 'б':
+				if next_card_value > current_card_value:
+					print('\nВаш ответ правильный! +20 очков')
+					score += 20
+					break
+				else:
+					print('\nВаш ответ неправильный! -15 очков')
+					score -= 15
+					break
+			elif answer == 'м':
+				if next_card_value < current_card_value:
+					print('\nВаш ответ правильный! +20 очков')
+					score += 20
+					break
+				else:
+					print('\nВаш ответ неправильный! -15 очков')
+					score -= 15
+					break
 			else:
-				print('Incorrect! -15 points')
-				score -= 15
-		elif answer == 'l':
-			if next_card_value < current_card_value:
-				print('Correct! +20 points')
-				score += 20
-			else:
-				print('Incorrect! -15 points')
-				score -= 15
-		else:
-			print('You can answer only "h" or "l"')
-		print('Score is %d\n' % score)
+				print('\nВы можете ответить только "б" или "м"\n')
+
+
+		print('Следующая карта: %s, %s' % (next_card_rank, next_card_suit))
+		print('Ваши очки: %s\n' % score)
 
 		current_card_rank = next_card_rank
 		current_card_value = next_card_value
-	print('\n_______________________________________\nТы проиграл :(')
-	go_again = input('Would you like to go again? If yes, press enter, otherwise press "q": ')
 
+	LOSE_TEXT = 'Если хотите играть ещё раз, нажмите ENTER, если нет введите "q": '
+	go_again = input(LOSE_TEXT)
 	if go_again.lower() == 'q':
 		break
 
-print('Ok, bye')
+print('Хорошо, пока!')
