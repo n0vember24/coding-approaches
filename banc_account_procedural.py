@@ -2,7 +2,6 @@ from pwinput import pwinput
 
 account_name = 'Хабиб'
 account_balance = 950000
-account_depo = 0
 account_password = '12345'
 
 INSTRUCTIONS_TEXT = """
@@ -30,11 +29,9 @@ while True:
 		depo_amount = int(input('\nEnter your deposit amount: '))
 		pswd = pwinput('\nEnter your password: ', mask='*')
 		if pswd == account_password:
-			if 0 < depo_amount < account_balance:
-				account_balance -= depo_amount
-				account_depo += depo_amount
-				SUCCESS_TEXT = 'Successful deposit\nYour account balance is: %s\nDeposit amount: %s' % (
-					account_balance, depo_amount)
+			if 0 < depo_amount:
+				account_balance += depo_amount
+				SUCCESS_TEXT = 'Successful deposit\nYour account balance is: %s' % account_balance
 				print(SUCCESS_TEXT)
 			else:
 				print('Incorrect deposit amount')
@@ -60,7 +57,6 @@ while True:
 		INFO_TEXT = f"""
 Account name: {account_name}
 Account balance: {account_balance}
-Account deposit amount: {account_depo}
 Account password: {'*' * len(account_password)}
 		"""
 		print(INFO_TEXT)
